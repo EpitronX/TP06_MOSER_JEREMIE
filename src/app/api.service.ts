@@ -8,7 +8,7 @@ import { environment } from '../../src/environnements/environnement';
 
 @Injectable()
 export class ApiService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   public loginClient(login: string, password: string): Observable<Client> {
     let data: String;
@@ -30,28 +30,32 @@ export class ApiService {
     return this.http.get<Product[]>(environment.backendCatalogue);
   }
 
-  public GetProductsFiltered(productName:string): Observable<Product[]> {
+  public GetProductsFiltered(productName: string): Observable<Product[]> {
     let request: string;
-    request = environment.backendCatalogue + '/' + productName;
+    if (productName !== "") {
+      request = environment.backendCatalogue + '/' + productName;
+    } else {
+      request = environment.backendCatalogue;
+    }
     console.log(request);
     return this.http.get<Product[]>(request);
   }
 
-//  public GetProductsFiltered(name: string, price: number): Observable<Product[]> {
+  //  public GetProductsFiltered(name: string, price: number): Observable<Product[]> {
 
-//   let httpOptions = {
-//     headers: new HttpHeaders({
-//       'Content-Type': 'application/x-www-form-urlencoded',
-//     }),
-//   };
+  //   let httpOptions = {
+  //     headers: new HttpHeaders({
+  //       'Content-Type': 'application/x-www-form-urlencoded',
+  //     }),
+  //   };
 
-//   let params = new HttpParams()
-//     .set('name', name)
-//     .set('price', price.toString());
+  //   let params = new HttpParams()
+  //     .set('name', name)
+  //     .set('price', price.toString());
 
-//   return this.http.get<Product[]>(
-//     environment.backendCatalogue, 
-//     { params: params, headers: httpOptions.headers }
-//   );
-//   }
+  //   return this.http.get<Product[]>(
+  //     environment.backendCatalogue, 
+  //     { params: params, headers: httpOptions.headers }
+  //   );
+  //   }
 }
