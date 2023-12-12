@@ -147,7 +147,6 @@ function getCatalogue (Request $request, Response $response, $args) {
 		return addHeaders ($response);
 	}
 	
-	
 	// Define the filterJson function outside of the getSearchCatalogue function
 	// function filterJson($data, $filters)
 	// {
