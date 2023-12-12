@@ -5,6 +5,8 @@ import { Observable } from 'rxjs';
 import { Store } from '@ngxs/store';
 import { AddProduct } from '../actions/product-action'
 import { ApiService } from '../api.service'
+import { AsyncSubject } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-products-view',
@@ -19,10 +21,8 @@ export class ProductsViewComponent {
 
   //constructor(private httpExchangeService: HTTPExchangeService) { }
   //constructor(private httpExchangeService: HTTPExchangeService, private store: Store) { 
-    constructor(private apiService: ApiService, private store: Store) { 
-
+  constructor(private apiService: ApiService, private store: Store) {
     this.products$ = this.apiService.GetProducts();
-
   }
   addProduct(product: Product) {
     console.log("#########################");
@@ -34,5 +34,5 @@ export class ProductsViewComponent {
     console.log("#########################");
     this.store.dispatch(new AddProduct(copyProduct));
   }
-  
+
 }

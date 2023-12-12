@@ -30,21 +30,28 @@ export class ApiService {
     return this.http.get<Product[]>(environment.backendCatalogue);
   }
 
- public GetProductsFiltered(name: string, price: number): Observable<Product[]> {
-
-  let httpOptions = {
-    headers: new HttpHeaders({
-      'Content-Type': 'application/x-www-form-urlencoded',
-    }),
-  };
-
-  let params = new HttpParams()
-    .set('name', name)
-    .set('price', price.toString());
-
-  return this.http.get<Product[]>(
-    environment.backendCatalogue, 
-    { params: params, headers: httpOptions.headers }
-  );
+  public GetProductsFiltered(productName:string): Observable<Product[]> {
+    let request: string;
+    request = environment.backendCatalogue + '/' + productName;
+    console.log(request);
+    return this.http.get<Product[]>(request);
   }
+
+//  public GetProductsFiltered(name: string, price: number): Observable<Product[]> {
+
+//   let httpOptions = {
+//     headers: new HttpHeaders({
+//       'Content-Type': 'application/x-www-form-urlencoded',
+//     }),
+//   };
+
+//   let params = new HttpParams()
+//     .set('name', name)
+//     .set('price', price.toString());
+
+//   return this.http.get<Product[]>(
+//     environment.backendCatalogue, 
+//     { params: params, headers: httpOptions.headers }
+//   );
+//   }
 }
