@@ -17,23 +17,11 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 	    return $response;
 	}
 	
-	// Define the filterJson function outside of the getSearchCatalogue function
-	function filterJson($data, $filters)
-	{
-		$filteredData = array_filter($data, function ($item) use ($filters) {
-			foreach ($filters as $key => $value) {
-				if (isset($item[$key]) && $item[$key] != $value) {
-					return false;
-				}
-			}
-			return true;
-		});
-		return array_values($filteredData);
-	}
 	
 	// Now you can use the filterJson function within the getSearchCatalogue function
 	function getSearchCatalogue(Request $request, Response $response, $args)
 	{
+		$filtre = $args['filtre'];
 		$flux = '[
 			{
 				"id": 1,
@@ -67,76 +55,72 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 			}
 			]';
 			
-			$filters = array(
-				'id' => $request->getParam('id'),
-				'price' => $request->getParam('price')
-			);
-			
-			// Call the function to filter the JSON data
-			//$filteredResult = filterJson(json_decode($flux, true), $filters);
-			
-			// Set the appropriate content type for the response
-			//$response = $response->withHeader('Content-Type', 'application/json');
-			
-			// Write the filtered result to the response body
-			//$response->getBody()->write(json_encode($filteredResult));
-			//$response->getBody()->write($filters);
-			$response->getBody()->write($flux);
-			
-			return addHeaders($response);
+			if ($filtre) {
+				$data = json_decode($flux, true); 
+				
+				$res = array_filter($data, function($obj) use ($filtre)
+				{ 
+					return strpos($obj["name"], $filtre) !== false;
+				});
+				$response->getBody()->write(json_encode(array_values($res)));
+			} else {
+				$response->getBody()->write($flux);
+	}
+	
+	return addHeaders ($response);
+}
+
+// API Nécessitant un Jwt valide
+function getCatalogue (Request $request, Response $response, $args) {
+	$flux = '[
+		{
+			"id": 1,
+			"name": "Potato",
+			"price": 10.99
+		},
+		{
+			"id": 2,
+			"name": "Lettuce",
+			"price": 10.99
+		},
+		{
+			"id": 3,
+			"name": "Tomato",
+			"price": 7.99
+		},
+		{
+			"id": 1,
+			"name": "Pumpkin",
+			"price": 7.99
+		},
+		{
+			"id": 2,
+			"name": "Carot",
+			"price": 4.99
+		},
+		{
+			"id": 3,
+			"name": "Cole Crops",
+			"price": 3.99
 		}
+		]';
 		
-		// API Nécessitant un Jwt valide
-		function getCatalogue (Request $request, Response $response, $args) {
-			$flux = '[
-				{
-				  "id": 1,
-				  "name": "Potato",
-				  "price": 10.99
-				},
-				{
-				  "id": 2,
-				  "name": "Lettuce",
-				  "price": 10.99
-				},
-				{
-				  "id": 3,
-				  "name": "Tomato",
-				  "price": 7.99
-				},
-				{
-				  "id": 1,
-				  "name": "Pumpkin",
-				  "price": 7.99
-				},
-				{
-				  "id": 2,
-				  "name": "Carot",
-				  "price": 4.99
-				},
-				{
-				  "id": 3,
-				  "name": "Cole Crops",
-				  "price": 3.99
-				}
-			  ]';
-			
-			$response->getBody()->write($flux);
-			
-			return addHeaders ($response);
-		}
-		function optionsUtilisateur (Request $request, Response $response, $args) {
-			
-			// Evite que le front demande une confirmation à chaque modification
-			$response = $response->withHeader("Access-Control-Max-Age", 600);
-			
-			return addHeaders ($response);
-		}
+		$response->getBody()->write($flux);
 		
-		// API Nécessitant un Jwt valide
-		function getUtilisateur (Request $request, Response $response, $args) {
+		return addHeaders ($response);
+	}
+	function optionsUtilisateur (Request $request, Response $response, $args) {
+		
+		// Evite que le front demande une confirmation à chaque modification
+		$response = $response->withHeader("Access-Control-Max-Age", 600);
 			
-			$payload = getJWTToken($request);
+		return addHeaders ($response);
+	}
+	
+	// API Nécessitant un Jwt valide
+	function getUtilisateur (Request $request, Response $response, $args) {
+		
+		$payload = getJWTToken($request);
 	    $login  = $payload->userid;
 	    
 		$flux = '{"nom":"feur","prenom":"jean"}';
@@ -145,10 +129,10 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 	    
 	    return addHeaders ($response);
 	}
-
+	
 	// APi d'authentification générant un JWT
 	function postLogin (Request $request, Response $response, $args) {   
-	    
+		
 		$response = createJwT ($response);
 		parse_str($request->getBody()->getContents(), $requestData);
 		if	($requestData['login'] == 'emma' && $requestData['password'] == 'toto')
@@ -162,4 +146,18 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 		}
 		return addHeaders ($response);
 	}
-
+	
+	
+	// Define the filterJson function outside of the getSearchCatalogue function
+	// function filterJson($data, $filters)
+	// {
+	// 	$filteredData = array_filter($data, function ($item) use ($filters) {
+	// 		foreach ($filters as $key => $value) {
+	// 			if (isset($item[$key]) && $item[$key] != $value) {
+	// 				return false;
+	// 			}
+	// 		}
+	// 		return true;
+	// 	});
+	// 	return array_values($filteredData);
+	// }
