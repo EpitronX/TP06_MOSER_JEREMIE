@@ -73,13 +73,15 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 			);
 			
 			// Call the function to filter the JSON data
-			$filteredResult = filterJson(json_decode($flux, true), $filters);
+			//$filteredResult = filterJson(json_decode($flux, true), $filters);
 			
 			// Set the appropriate content type for the response
-			$response = $response->withHeader('Content-Type', 'application/json');
+			//$response = $response->withHeader('Content-Type', 'application/json');
 			
 			// Write the filtered result to the response body
-			$response->getBody()->write(json_encode($filteredResult));
+			//$response->getBody()->write(json_encode($filteredResult));
+			//$response->getBody()->write($filters);
+			$response->getBody()->write($flux);
 			
 			return addHeaders($response);
 		}
