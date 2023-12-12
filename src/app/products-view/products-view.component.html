@@ -1,0 +1,37 @@
+
+<div *ngIf="!isUserConnected">
+  <!-- <br> -->
+  <p>Waiting for connexion...</p>
+</div>
+<div *ngIf="isUserConnected">
+  <p>Here are your products :</p> 
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Price</th>
+        <th>+</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let product of products$ | async">
+        <!-- <td>{{product}}</td> -->
+        <td
+          *ngIf="(product.name.toLowerCase().includes(filters[0].toLowerCase()) && ( (filters[1] <= 0)|| (filters[1] == product.price && filters[1] > 0)) )">
+          {{ product.id }}
+        </td>
+        <td *ngIf="(product.name.toLowerCase().includes(filters[0].toLowerCase()) && ( (filters[1] <= 0)|| (filters[1] == product.price && filters[1] > 0)) )">
+          {{ product.name }}
+        </td>
+        <td *ngIf="(product.name.toLowerCase().includes(filters[0].toLowerCase()) && ( (filters[1] <= 0)|| (filters[1] == product.price && filters[1] > 0)) )">
+          {{ product.price }} €
+        </td>
+        <td *ngIf="(product.name.toLowerCase().includes(filters[0].toLowerCase()) && ( (filters[1] <= 0)|| (filters[1] == product.price && filters[1] > 0)) )">
+          <Button (click)="addProduct(product)">+</Button>
+        </td> 
+      </tr>
+    </tbody>
+  </table>
+  <!-- {{filters}} -->
+</div>

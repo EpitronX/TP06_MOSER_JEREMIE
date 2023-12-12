@@ -1,0 +1,9 @@
+<!-- <p>panier works!</p> -->
+<div *ngIf="isUserConnected">
+  <div>Product count : {{ nb$ | async }}</div>
+  <div>Cart price : {{ cartPrice$ | async }} €</div>
+  <br>
+  <div *ngFor="let product of liste$ | async">
+    {{ product.name }} {{product.price}} €  <button (click)="delProduct(product)">-</button>
+  </div>
+</div>

@@ -1,0 +1,9 @@
+<app-login (isUserConnected)="UserIsConnected($event)"></app-login>
+<p *ngIf="isUserConnected">
+    Welcome {{connectedUser.nom}} {{connectedUser.prenom}} !
+    <br>
+    Here's your cart ⬇
+</p>
+<app-panier [isUserConnected]="isUserConnected"></app-panier>
+<app-search-bar [isUserConnected]="isUserConnected" (searchUpdated)="SendSearchParams($event)"></app-search-bar>
+<app-products-view [isUserConnected]="isUserConnected" [filters]="filters"></app-products-view>
