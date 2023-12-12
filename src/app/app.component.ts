@@ -21,26 +21,27 @@ export class AppComponent {
 
   constructor(private apiService: ApiService) {
 
-    this.asyncSubject.subscribe(() => {
-      this.apiService.GetProductsFiltered(this.filters[0]).subscribe(
-        (result) => {
-          this.products = result;
-          console.log("2 there ??");
-          console.log(result);
-        },
-        (error) => {
-          console.error('Error fetching products', error);
-        }
-      );
-    });
+    // this.asyncSubject.subscribe(() => {
+    //   this.apiService.GetProductsFiltered(this.filters[0]).subscribe(
+    //     (result) => {
+    //       this.products = result;
+    //       console.log("2 there ??");
+    //       console.log(result);
+    //     },
+    //     (error) => {
+    //       console.error('Error fetching products', error);
+    //     }
+    //   );
+    // });
 
   }
 
   SendSearchParams($event: any) {
     console.log($event);
-    console.log("1 there ??");
-    this.filters = $event
-    this.asyncSubject.next(this.apiService.GetProductsFiltered(this.filters[0]));
+    // console.log("1 there ??");
+    this.filters = $event;
+
+    //this.asyncSubject.next(this.apiService.GetProductsFiltered(this.filters[0]));
   }
   UserIsConnected([$isUserConnected, $connectedUser]: [boolean, Client]) {
     console.log('1 ');
