@@ -1,29 +1,32 @@
 <?php
+
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
-	function optionsCatalogue (Request $request, Response $response, $args) {
-	    
-	    // Evite que le front demande une confirmation à chaque modification
-	    $response = $response->withHeader("Access-Control-Max-Age", 600);
-	    
-	    return addHeaders ($response);
-	}
+function optionsCatalogue(Request $request, Response $response, $args)
+{
 
-	function hello(Request $request, Response $response, $args) {
-	    $array = [];
-	    $array ["nom"] = $args ['name'];
-	    $response->getBody()->write(json_encode ($array));
-	    return $response;
-	}
-	
-	
-	// Now you can use the filterJson function within the getSearchCatalogue function
-	function getSearchCatalogue(Request $request, Response $response, $args)
-	{
-		$productfilter = $args['productfilter'];
-		$pricefilter = $args['pricefilter'];
-		$flux = '[
+	// Evite que le front demande une confirmation à chaque modification
+	$response = $response->withHeader("Access-Control-Max-Age", 600);
+
+	return addHeaders($response);
+}
+
+function hello(Request $request, Response $response, $args)
+{
+	$array = [];
+	$array["nom"] = $args['name'];
+	$response->getBody()->write(json_encode($array));
+	return $response;
+}
+
+
+// Now you can use the filterJson function within the getSearchCatalogue function
+function getSearchCatalogue(Request $request, Response $response, $args)
+{
+	$productfilter = $args['productfilter'];
+	$pricefilter = $args['pricefilter'];
+	$flux = '[
 			{
 				"id": 1,
 				"name": "Potato",
@@ -55,36 +58,43 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 				"price": 3.99
 			}
 			]';
-			
-			$data = json_decode($flux, true); 
 
-			if ($productfilter || $pricefilter) {
+	$data = json_decode($flux, true);
 
+	if ($productfilter) {
 
-				$res = array_filter($data, function($obj) use ($productfilter, $pricefilter) { 
-					$nameMatch = true;
-					$priceMatch = true;
-		
-					if ($productfilter) {
-						$nameMatch = strpos($obj["name"], $productfilter) !== false;
-					}
-		
-					if ($pricefilter) {
-						$priceMatch = $obj["price"] == $pricefilter;
-					}
-		
-					return $nameMatch && $priceMatch;
-				});
-				
-			} else {
-				$response->getBody()->write($flux);
+		if ($pricefilter) {
+			//$res = array_filter($data, function ($obj) use ($productfilter, $pricefilter) {
+			$res = array_filter($data, function ($obj) use ($productfilter) {
+				$nameMatch = true;
+				$priceMatch = true;
+
+				if ($productfilter) {
+					$nameMatch = strpos($obj["name"], $productfilter) !== false;
+				}
+
+				if ($pricefilter) {
+					$priceMatch = $obj["price"] == $pricefilter;
+				}
+
+				return $nameMatch && $priceMatch;
+			});
+		} else {
+
+			$res = array_filter($data, function ($obj) use ($productfilter) {
+				return strpos($obj["name"], $productfilter) !== false;
+			});
+		}
+	} else {
+		$response->getBody()->write($flux);
 	}
-	
-	return addHeaders ($response);
+
+	return addHeaders($response);
 }
 
 // API Nécessitant un Jwt valide
-function getCatalogue (Request $request, Response $response, $args) {
+function getCatalogue(Request $request, Response $response, $args)
+{
 	$flux = '[
 		{
 			"id": 1,
@@ -117,48 +127,48 @@ function getCatalogue (Request $request, Response $response, $args) {
 			"price": 3.99
 		}
 		]';
-		
-		$response->getBody()->write($flux);
-		
-		return addHeaders ($response);
-	}
-	function optionsUtilisateur (Request $request, Response $response, $args) {
-		
-		// Evite que le front demande une confirmation à chaque modification
-		$response = $response->withHeader("Access-Control-Max-Age", 600);
-			
-		return addHeaders ($response);
-	}
-	
-	// API Nécessitant un Jwt valide
-	function getUtilisateur (Request $request, Response $response, $args) {
-		
-		$payload = getJWTToken($request);
-	    $login  = $payload->userid;
-	    
+
+	$response->getBody()->write($flux);
+
+	return addHeaders($response);
+}
+function optionsUtilisateur(Request $request, Response $response, $args)
+{
+
+	// Evite que le front demande une confirmation à chaque modification
+	$response = $response->withHeader("Access-Control-Max-Age", 600);
+
+	return addHeaders($response);
+}
+
+// API Nécessitant un Jwt valide
+function getUtilisateur(Request $request, Response $response, $args)
+{
+
+	$payload = getJWTToken($request);
+	$login  = $payload->userid;
+
+	$flux = '{"nom":"feur","prenom":"jean"}';
+
+	$response->getBody()->write($flux);
+
+	return addHeaders($response);
+}
+
+// APi d'authentification générant un JWT
+function postLogin(Request $request, Response $response, $args)
+{
+
+	$response = createJwT($response);
+	parse_str($request->getBody()->getContents(), $requestData);
+	if ($requestData['login'] == 'emma' && $requestData['password'] == 'toto') {
 		$flux = '{"nom":"feur","prenom":"jean"}';
-	    
-	    $response->getBody()->write($flux);
-	    
-	    return addHeaders ($response);
+		$response->getBody()->write($flux);
+	} else {
+		$response->withStatus(401);
 	}
-	
-	// APi d'authentification générant un JWT
-	function postLogin (Request $request, Response $response, $args) {   
-		
-		$response = createJwT ($response);
-		parse_str($request->getBody()->getContents(), $requestData);
-		if	($requestData['login'] == 'emma' && $requestData['password'] == 'toto')
-		{
-			$flux = '{"nom":"feur","prenom":"jean"}';
-			$response->getBody()->write($flux );
-		}
-		else
-		{
-			$response->withStatus(401);
-		}
-		return addHeaders ($response);
-	}
+	return addHeaders($response);
+}
 	
 	// Define the filterJson function outside of the getSearchCatalogue function
 	// function filterJson($data, $filters)
