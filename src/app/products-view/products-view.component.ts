@@ -26,7 +26,7 @@ export class ProductsViewComponent implements OnChanges {
     this.products$ = this.asyncSubject.pipe(
       debounceTime(50),
       //distinctUntilChanged(),
-      switchMap(() => this.apiService.GetProductsFiltered(this.filters[0]))
+      switchMap(() => this.apiService.GetProductsFiltered(this.filters[0], this.filters[1]))
     );
   }
 

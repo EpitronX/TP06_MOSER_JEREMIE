@@ -30,10 +30,10 @@ export class ApiService {
     return this.http.get<Product[]>(environment.backendCatalogue);
   }
 
-  public GetProductsFiltered(productName: string): Observable<Product[]> {
+  public GetProductsFiltered(productName: string, price: number): Observable<Product[]> {
     let request: string;
-    if (productName !== "") {
-      request = environment.backendCatalogue + '/' + productName;
+    if (productName !== "" && price !== undefined) {
+      request = environment.backendCatalogue + '/' + productName + '/' + price;
     } else {
       request = environment.backendCatalogue;
     }
