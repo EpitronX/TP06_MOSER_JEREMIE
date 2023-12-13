@@ -73,7 +73,7 @@ function getSearchCatalogue(Request $request, Response $response, $args)
 			}
 
 			if ($pricefilter) {
-				$priceMatch = $pricefilter == 0 || $obj["price"] < $pricefilter;
+				$priceMatch = $pricefilter == 0 || $obj["price"] <= $pricefilter;
 			}
 
 			return $nameMatch && $priceMatch;
