@@ -70,12 +70,12 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 					}
 		
 					if ($pricefilter) {
-						$priceMatch = $obj["price"] < $pricefilter;
+						$priceMatch = $obj["price"] == $pricefilter;
 					}
 		
 					return $nameMatch && $priceMatch;
 				});
-
+				
 			} else {
 				$response->getBody()->write($flux);
 	}
