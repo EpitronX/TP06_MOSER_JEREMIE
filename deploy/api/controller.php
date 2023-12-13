@@ -21,7 +21,8 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 	// Now you can use the filterJson function within the getSearchCatalogue function
 	function getSearchCatalogue(Request $request, Response $response, $args)
 	{
-		$filtre = $args['filtre'];
+		$productfilter = $args['productfilter'];
+		$pricefilter = $args['pricefilter'];
 		$flux = '[
 			{
 				"id": 1,
@@ -55,14 +56,26 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 			}
 			]';
 			
-			if ($filtre) {
-				$data = json_decode($flux, true); 
-				
-				$res = array_filter($data, function($obj) use ($filtre)
-				{ 
-					return strpos($obj["name"], $filtre) !== false;
+			$data = json_decode($flux, true); 
+
+			if ($productfilter || $pricefilter) {
+
+
+				$res = array_filter($data, function($obj) use ($productfilter, $pricefilter) { 
+					$nameMatch = true;
+					$priceMatch = true;
+		
+					if ($productfilter) {
+						$nameMatch = strpos($obj["name"], $productfilter) !== false;
+					}
+		
+					if ($pricefilter) {
+						$priceMatch = $obj["price"] < $pricefilter;
+					}
+		
+					return $nameMatch && $priceMatch;
 				});
-				$response->getBody()->write(json_encode(array_values($res)));
+
 			} else {
 				$response->getBody()->write($flux);
 	}
