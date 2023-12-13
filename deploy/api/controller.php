@@ -63,9 +63,30 @@ function getSearchCatalogue(Request $request, Response $response, $args)
 
 	if ($productfilter) {
 
-		$res = array_filter($data, function ($obj) use ($productfilter) {
-			return strpos($obj["name"], $productfilter) !== false;
-		});
+		if ($pricefilter) {
+			//$res = array_filter($data, function ($obj) use ($productfilter, $pricefilter) {
+			$res = array_filter($data, function ($obj) use ($productfilter, $pricefilter) {
+				$nameMatch = true;
+				$priceMatch = true;
+
+				if ($productfilter) {
+					$nameMatch = strpos($obj["name"], $productfilter) !== false;
+				}
+
+				if ($pricefilter) {
+					$priceMatch = $obj["price"] == $pricefilter;
+				}
+
+				return $nameMatch && $priceMatch;
+			});
+			$response->getBody()->write(json_encode(array_values($res)));
+		} else {
+
+			$res = array_filter($data, function ($obj) use ($productfilter) {
+				return strpos($obj["name"], $productfilter) !== false;
+			});
+			$response->getBody()->write(json_encode(array_values($res)));
+		}
 	} else {
 		$response->getBody()->write($flux);
 	}
