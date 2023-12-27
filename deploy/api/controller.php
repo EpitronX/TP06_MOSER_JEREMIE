@@ -83,7 +83,7 @@ function getSearchCatalogue(Request $request, Response $response, $args)
 		$response->getBody()->write($flux);
 	}
 
-	return addHeaders ($response);
+	return addHeaders($response);
 }
 
 // API Nécessitant un Jwt valide
@@ -122,70 +122,80 @@ function getCatalogue(Request $request, Response $response, $args)
 		}
 		]';
 
-		$data = json_decode($flux, true);
-		
-		$response->getBody()->write(json_encode($data));
+	$data = json_decode($flux, true);
 
-	return addHeaders ($response);
+	$response->getBody()->write(json_encode($data));
+
+	return addHeaders($response);
 }
-function optionsUtilisateur (Request $request, Response $response, $args) {
+function optionsUtilisateur(Request $request, Response $response, $args)
+{
 
 	// Evite que le front demande une confirmation à chaque modification
 	$response = $response->withHeader("Access-Control-Max-Age", 600);
 
-	return addHeaders ($response);
+	return addHeaders($response);
 }
 
 // API Nécessitant un Jwt valide
-	function getUtilisateur (Request $request, Response $response, $args) {
+function getUtilisateur(Request $request, Response $response, $args)
+{
 	global $entityManager;
 
 	$payload = getJWTToken($request);
 	$login  = $payload->userid;
 
 	$utilisateurRepository = $entityManager->getRepository('Utilisateurs');
-	    $utilisateur = $utilisateurRepository->findOneBy(array('login' => $login));
-	    if ($utilisateur) {
+	$utilisateur = $utilisateurRepository->findOneBy(array('login' => $login));
+	if ($utilisateur) {
 		$data = array('nom' => $utilisateur->getNom(), 'prenom' => $utilisateur->getPrenom());
-		$response = addHeaders ($response);
-		$response = createJwT ($response);
+		$response = addHeaders($response);
+		$response = createJwT($response);
 		$response->getBody()->write(json_encode($data));
-	    } else {
+	} else {
 		$response = $response->withStatus(404);
-	    }
-
-	    return addHeaders ($response);
-}
-
-	// APi d'authentification générant un JWT
-	function postLogin (Request $request, Response $response, $args) {   
-	    global $entityManager;
-	    $err=false;
-	    $body = $request->getParsedBody();
-	    $login = $body ['login'] ?? "";
-	    $pass = $body ['password'] ?? "";
-
-	    if (!preg_match("/[a-zA-Z0-9]{1,20}/",$login))   {
-		$err = true;
-	    }
-	    if (!preg_match("/[a-zA-Z0-9]{1,20}/",$pass))  {
-		$err=true;
-	    }
-	    if (!$err) {
-		$utilisateurRepository = $entityManager->getRepository('Utilisateurs');
-		$utilisateur = $utilisateurRepository->findOneBy(array('login' => $login, 'password' => $pass));
-		if ($utilisateur and $login == $utilisateur->getLogin() and $pass == $utilisateur->getPassword()) {
-		    $response = addHeaders ($response);
-		    $response = createJwT ($response);
-		    $data = array('nom' => $utilisateur->getNom(), 'prenom' => $utilisateur->getPrenom());
-		    $response->getBody()->write(json_encode($data));
-		} else {          
-		    $response = $response->withStatus(403);
-		}
-	    } else {
-		$response = $response->withStatus(500);
-	    }
-
-	    return addHeaders ($response);
 	}
 
+	return addHeaders($response);
+}
+
+// APi d'authentification générant un JWT
+function postLogin(Request $request, Response $response, $args)
+{
+	$response = createJwT($response);
+	global $entityManager;
+	$err = false;
+	$body = $request->getParsedBody();
+	$login = $body['login'] ?? "";
+	$pass = $body['password'] ?? "";
+
+	parse_str($request->getBody()->getContents(), $requestData);
+	if ($login == 'emma' && $pass == 'toto') {
+		$flux = '{"nom":"feur","prenom":"jean"}';
+		$response->getBody()->write($flux);
+	} else {
+		$response->withStatus(401);
+	}
+	// if (!preg_match("/[a-zA-Z0-9]{1,20}/", $login)) {
+	// 	$err = true;
+	// }
+	// if (!preg_match("/[a-zA-Z0-9]{1,20}/", $pass)) {
+	// 	$err = true;
+	// }
+	// if (!$err) {
+	// 	$utilisateurRepository = $entityManager->getRepository('Utilisateurs');
+	// 	$utilisateur = $utilisateurRepository->findOneBy(array('login' => $login, 'password' => $pass));
+	// 	if ($utilisateur and $login == $utilisateur->getLogin() and $pass == $utilisateur->getPassword()) {
+	// 		$response = addHeaders($response);
+	// 		$response = createJwT($response);
+	// 		$data = array('nom' => $utilisateur->getNom(), 'prenom' => $utilisateur->getPrenom());
+	// 		$response->getBody()->write(json_encode($data));
+	// 	} else {
+	// 		$response = $response->withStatus(403);
+	// 	}
+	// } else {
+	// 	$response = $response->withStatus(500);
+	// }
+
+	return addHeaders($response);
+}
