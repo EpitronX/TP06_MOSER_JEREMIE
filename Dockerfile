@@ -45,4 +45,4 @@ RUN mkdir ./src \
 EXPOSE 80
 
 # Define the application entry point
-CMD ["apache2-foreground"]
+CMD ["apache2ctl", "-D", "FOREGROUND"]
