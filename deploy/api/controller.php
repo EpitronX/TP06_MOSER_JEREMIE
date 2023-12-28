@@ -26,39 +26,22 @@ function getSearchCatalogue(Request $request, Response $response, $args)
 {
 	$productfilter = $args['productfilter'];
 	$pricefilter = $args['pricefilter'];
-	$flux = '[
-			{
-				"id": 1,
-				"name": "Potato",
-				"price": 10.99
-			},
-			{
-				"id": 2,
-				"name": "Lettuce",
-				"price": 10.99
-			},
-			{
-				"id": 3,
-				"name": "Tomato",
-				"price": 7.99
-			},
-			{
-				"id": 1,
-				"name": "Pumpkin",
-				"price": 7.99
-			},
-			{
-				"id": 2,
-				"name": "Carot",
-				"price": 4.99
-			},
-			{
-				"id": 3,
-				"name": "Cole Crops",
-				"price": 3.99
-			}
-			]';
+	global $entityManager;
+	$productRepository = $entityManager->getRepository('Products');
 
+	$products = $productRepository->findAll();
+
+	$productsArray = array();
+	foreach ($products as $product) {
+		$productData = array(
+			'id' => $product->getId(),
+			'name' => $product->getName(),
+			'price' => $product->getPrice()
+		);
+		$productsArray[] = $productData;
+	}
+	
+	$flux = json_encode($productsArray);
 	$data = json_decode($flux, true);
 
 	if ($productfilter || $pricefilter) {
@@ -89,39 +72,22 @@ function getSearchCatalogue(Request $request, Response $response, $args)
 // API Nécessitant un Jwt valide
 function getCatalogue(Request $request, Response $response, $args)
 {
-	$flux = '[
-		{
-			"id": 1,
-			"name": "Potato",
-			"price": 10.99
-		},
-		{
-			"id": 2,
-			"name": "Lettuce",
-			"price": 10.99
-		},
-		{
-			"id": 3,
-			"name": "Tomato",
-			"price": 7.99
-		},
-		{
-			"id": 1,
-			"name": "Pumpkin",
-			"price": 7.99
-		},
-		{
-			"id": 2,
-			"name": "Carot",
-			"price": 4.99
-		},
-		{
-			"id": 3,
-			"name": "Cole Crops",
-			"price": 3.99
-		}
-		]';
+	global $entityManager;
+	$productRepository = $entityManager->getRepository('Products');
 
+	$products = $productRepository->findAll();
+
+	$productsArray = array();
+	foreach ($products as $product) {
+		$productData = array(
+			'id' => $product->getId(),
+			'name' => $product->getName(),
+			'price' => $product->getPrice()
+		);
+		$productsArray[] = $productData;
+	}
+	
+	$flux = json_encode($productsArray);
 	$data = json_decode($flux, true);
 
 	$response->getBody()->write(json_encode($data));
@@ -162,40 +128,40 @@ function getUtilisateur(Request $request, Response $response, $args)
 // APi d'authentification générant un JWT
 function postLogin(Request $request, Response $response, $args)
 {
-	$response = createJwT($response);
 	global $entityManager;
 	$err = false;
 	$body = $request->getParsedBody();
 	$login = $body['login'] ?? "";
 	$pass = $body['password'] ?? "";
-
-	parse_str($request->getBody()->getContents(), $requestData);
-	if ($login == 'emma' && $pass == 'toto') {
-		$flux = '{"nom":"feur","prenom":"jean"}';
-		$response->getBody()->write($flux);
-	} else {
-		$response->withStatus(401);
+	
+	if (!preg_match("/[a-zA-Z0-9]{1,20}/", $login)) {
+		$err = true;
 	}
-	// if (!preg_match("/[a-zA-Z0-9]{1,20}/", $login)) {
-	// 	$err = true;
-	// }
-	// if (!preg_match("/[a-zA-Z0-9]{1,20}/", $pass)) {
-	// 	$err = true;
-	// }
-	// if (!$err) {
-	// 	$utilisateurRepository = $entityManager->getRepository('Utilisateurs');
-	// 	$utilisateur = $utilisateurRepository->findOneBy(array('login' => $login, 'password' => $pass));
-	// 	if ($utilisateur and $login == $utilisateur->getLogin() and $pass == $utilisateur->getPassword()) {
-	// 		$response = addHeaders($response);
-	// 		$response = createJwT($response);
-	// 		$data = array('nom' => $utilisateur->getNom(), 'prenom' => $utilisateur->getPrenom());
-	// 		$response->getBody()->write(json_encode($data));
-	// 	} else {
-	// 		$response = $response->withStatus(403);
-	// 	}
-	// } else {
-	// 	$response = $response->withStatus(500);
-	// }
-
+	if (!preg_match("/[a-zA-Z0-9]{1,20}/", $pass)) {
+		$err = true;
+	}
+	if (!$err) {
+		$utilisateurRepository = $entityManager->getRepository('Utilisateurs');
+		
+		$utilisateur = $utilisateurRepository->findOneBy(array('login' => $login, 'password' => $pass));
+		if ($utilisateur and $login == $utilisateur->getLogin() and $pass == $utilisateur->getPassword()) {
+			$response = addHeaders($response);
+			$response = createJwT($response);
+			$data = array('nom' => $utilisateur->getNom(), 'prenom' => $utilisateur->getPrenom());
+			$response->getBody()->write(json_encode($data));
+		} else {
+			$response = $response->withStatus(403);
+		}
+	} else {
+		$response = $response->withStatus(500);
+	}
 	return addHeaders($response);
 }
+
+// $response = createJwT($response);
+	// if ($login == 'emma' && $pass == 'toto') {
+	// 	$flux = '{"nom":"feur","prenom":"jean"}';
+	// 	$response->getBody()->write($flux);
+	// } else {
+	// 	$response->withStatus(401);
+	// }
