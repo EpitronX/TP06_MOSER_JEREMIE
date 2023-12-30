@@ -201,15 +201,15 @@ function LoginValide(Request $request, Response $response, $args)
 	if (!$err) {
 		$utilisateurRepository = $entityManager->getRepository('Utilisateurs');
 		$utilisateur = $utilisateurRepository->findOneBy(['login' => $login]);
+		$status = 'Le pseudo de login est autorisé !';
 
 		if ($utilisateur !== null) {
 			$loginAllowed = false;
 			$status = 'Le pseudo de login est déjà utilisé !';
 		}
-		$st
 	} else {
 		$loginAllowed = false;
-		$status = 'Le pseudo est invalide !';
+		$status = 'Le pseudo de login est invalide !';
 		$response = $response->withStatus(400);
 	}
 	$array["loginAllowed"] = $loginAllowed;
@@ -251,21 +251,20 @@ function AddUser(Request $request, Response $response, $args)
 
 		$emailValidationResponse = EmailValide($request, $response, ['email' => $email]);
 		$emailAllowed = json_decode($emailValidationResponse->getBody(), true)['emailAllowed'];
-		$response->getBody()->write(json_encode(','));
+		$response->getBody()->rewind();
 
 		if (!$emailAllowed) {
 			$status = 'Email not allowed. User registration rejected.';
 			$error = json_decode($emailValidationResponse->getBody(), true);
 			$response = $response->withStatus(400);
 		} else {
-
+			
+			
 			$loginValidationResponse = LoginValide($request, $response, ['login' => $login]);
 			$loginAllowed = json_decode($loginValidationResponse->getBody(), true)['loginAllowed'];
-			$response->getBody()->write(json_encode(','));
-
 			if (!$loginAllowed) {
 				$status = 'Login\'s already taken ! User registration rejected.';
-				$error = json_encode(json_decode($loginValidationResponse->getBody(), true));
+				$error = json_decode($loginValidationResponse->getBody(), true);
 				$response = $response->withStatus(400);
 			} else {
 				try {
