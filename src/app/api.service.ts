@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-
+import { Utilisateur } from './models/utilisateur';
 import { Observable } from 'rxjs';
 import { Client } from './models/client';
 import { Product } from './product.model';
@@ -41,21 +41,8 @@ export class ApiService {
     return this.http.get<Product[]>(request);
   }
 
-  //  public GetProductsFiltered(name: string, price: number): Observable<Product[]> {
+  public CreateUser(): Observable<Utilisateur> {
+    return this.http.post<Utilisateur>(environment., );
+  }
 
-  //   let httpOptions = {
-  //     headers: new HttpHeaders({
-  //       'Content-Type': 'application/x-www-form-urlencoded',
-  //     }),
-  //   };
-
-  //   let params = new HttpParams()
-  //     .set('name', name)
-  //     .set('price', price.toString());
-
-  //   return this.http.get<Product[]>(
-  //     environment.backendCatalogue, 
-  //     { params: params, headers: httpOptions.headers }
-  //   );
-  //   }
 }

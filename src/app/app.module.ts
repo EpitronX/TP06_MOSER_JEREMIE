@@ -13,6 +13,7 @@ import { PanierComponent } from './panier/panier.component';
 import { ApiService } from './api.service';
 import { ApiHttpInterceptor } from './http-interceptor';
 import { LoginComponent } from './login/login.component';
+import { UserCreationComponent } from './user-creation/user-creation.component';
 @NgModule({
   declarations:
     [
@@ -20,7 +21,8 @@ import { LoginComponent } from './login/login.component';
       ProductsViewComponent,
       SearchBarComponent,
       PanierComponent,
-      LoginComponent
+      LoginComponent,
+      UserCreationComponent
     ],
   imports:
     [
