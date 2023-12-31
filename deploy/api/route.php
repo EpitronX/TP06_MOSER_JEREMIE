@@ -2,6 +2,10 @@
 
 	$app->get('/api/hello/{name}', 'hello');
 
+	$app->get('/api/emailtest/{email}', 'EmailValide');
+
+	$app->get('/api/logintest/{login}', 'LoginValide');
+
 	$app->options('/api/catalogue', 'optionsCatalogue' );
 
 	// API Nécessitant un Jwt valide
@@ -17,6 +21,9 @@
 
 	// APi d'authentification générant un JWT
 	$app->post('/api/utilisateur/login', 'postLogin');
+
+	// APi d'authentification générant un JWT
+	$app->post('/api/utilisateur/create', 'AddUser');
 	
 	
 
