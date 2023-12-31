@@ -1,10 +1,12 @@
 export class Utilisateur {
-    prenom: string = '';
     nom: string = '';
+    prenom: string = '';
     adresse: string = '';
+    codepostal: string = '';
     ville: string = '';
-    telephone: string = '';
     email: string = '';
     sexe: string = '';
+    login: string = '';
     password: string = '';
+    telephone: string = '';
 }

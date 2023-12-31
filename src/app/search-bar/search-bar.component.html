@@ -1,3 +1,25 @@
+<style>
+    label {
+      font-weight: bold;
+    }
+  
+    input {
+      padding: 8px;
+      margin: 5px 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+  
+    button {
+      padding: 8px 12px;
+      margin-top: 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  </style>
 
 <div *ngIf="isUserConnected">
     <label>Nom du produit : </label>
@@ -5,5 +27,4 @@
     <br>
     <label>Prix MAX du produit : </label>
     <input (input)="OnSearchUpdate()"  [(ngModel)] = "priceSearch" title="Indiquez un prix" type="number"/>
-    <!-- <Button  title="Afficher les articles dont le prix est égal au prix indiqué">Rechercher le produit</Button> -->
 </div>

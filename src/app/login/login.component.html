@@ -41,19 +41,27 @@
     button:hover {
       background-color: #555;
     }
-    
+    .logout-button-container {
+    /* position: fixed; */
+    top: 10px;
+    left: 10px;  
+    text-align: right;
+  }
+  
   </style>
 <div *ngIf="!cnx">
-    <label for="login">login : </label><input [(ngModel)]="login" /><br />
-<label for="password">password : </label><input [(ngModel)]="password" type="password" /><br />
+  <p>Already have an account ? Let's log in !</p>
+    <label for="login">login : </label><input [(ngModel)]="login" (keyup.enter)="connexion()" /><br />
+<label for="password">password : </label><input [(ngModel)]="password" (keyup.enter)="connexion()" type="password" /><br />
 <br />
 <button [disabled]="loading" (click)="connexion()">Connexion</button>
-<p *ngIf="wrongCredentials">You entered wrong credentials !</p>
+<p *ngIf="wrongCredentials" style="color:#ca1a1a;">You entered wrong credentials !</p>
 </div>
 
-<div *ngIf="cnx">
+<div *ngIf="cnx" class="logout-button-container">
     <br />
     <button (click)="deconnexion()">Deconnexion</button>
 </div>
 
 <hr />
+<!-- <hr *ngIf="!isUserConnected"/> -->

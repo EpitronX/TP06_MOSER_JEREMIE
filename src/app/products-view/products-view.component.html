@@ -1,10 +1,56 @@
 
-<div *ngIf="!isUserConnected">
-  <!-- <br> -->
-  <p>Waiting for connexion...</p>
-</div>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  header {
+    background-color: #333;
+    color: #fff;
+    padding: 1rem;
+    text-align: center;
+  }
+  section {
+    padding: 2rem;
+    text-align: center;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+  }
+  th, td {
+    padding: 0.5rem;
+    text-align: center;
+    border: 1px solid #ddd;
+  }
+  th {
+    background-color: #333;
+    color: #fff;
+  }
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  tr:hover {
+    background-color: #e2e2e2;
+  }
+  button {
+    background-color: #333;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border: none;
+    cursor: pointer;
+  }
+  button:hover {
+    background-color: #555;
+  }
+</style>
+
 <div *ngIf="isUserConnected">
-  <p>Here are your products :</p> 
+  <p>Here are the available products :</p> 
   <table>
     <thead>
       <tr>
@@ -15,24 +61,7 @@
       </tr>
     </thead>
     <tbody>
-      <!-- <tr *ngFor="let product of products$ | async">
-        <td>{{product}}</td>
-        <td
-          *ngIf="(product.name.toLowerCase().includes(filters[0].toLowerCase()) && ( (filters[1] <= 0)|| (filters[1] == product.price && filters[1] > 0)) )">
-          {{ product.id }}
-        </td>
-        <td *ngIf="(product.name.toLowerCase().includes(filters[0].toLowerCase()) && ( (filters[1] <= 0)|| (filters[1] == product.price && filters[1] > 0)) )">
-          {{ product.name }}
-        </td>
-        <td *ngIf="(product.name.toLowerCase().includes(filters[0].toLowerCase()) && ( (filters[1] <= 0)|| (filters[1] == product.price && filters[1] > 0)) )">
-          {{ product.price }} €
-        </td>
-        <td *ngIf="(product.name.toLowerCase().includes(filters[0].toLowerCase()) && ( (filters[1] <= 0)|| (filters[1] == product.price && filters[1] > 0)) )">
-          <Button (click)="addProduct(product)">+</Button>
-        </td> 
-      </tr> -->
-      <tr *ngFor="let product of products$ | async">
-        <!-- <td>{{product}}</td> -->
+           <tr *ngFor="let product of products$ | async">
         <td>
           {{ product.id }}
         </td>
@@ -48,5 +77,4 @@
       </tr>
     </tbody>
   </table>
-  <!-- {{filters}} -->
 </div>

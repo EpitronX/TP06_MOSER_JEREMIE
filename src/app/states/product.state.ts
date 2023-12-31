@@ -31,7 +31,7 @@ export class ProductState {
   static getCartPrice(state: ProductStateModel) {
     let totalprice :number = 0;
     state.products.forEach(product => {
-    totalprice += product.price
+    totalprice += Number(product.price)
     });
     return totalprice.toFixed(2);
   }

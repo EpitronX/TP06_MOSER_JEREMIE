@@ -41,8 +41,7 @@ export class ApiService {
     return this.http.get<Product[]>(request);
   }
 
-  public CreateUser(user: Utilisateur): Observable<Utilisateur> {
-    return this.http.post<Utilisateur>(environment.backendCreationUser, user );
+CreateUser(user: Utilisateur): Observable<Utilisateur> {
+    return this.http.post<Utilisateur>(environment.backendCreationUser, user);
   }
-
 }
