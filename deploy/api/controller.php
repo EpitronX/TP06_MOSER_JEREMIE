@@ -50,9 +50,9 @@ function getSearchCatalogue(Request $request, Response $response, $args)
 		$res = array_filter($data, function ($obj) use ($productfilter, $pricefilter) {
 			$nameMatch = true;
 			$priceMatch = true;
-
+		
 			if ($productfilter) {
-				$nameMatch = strpos($obj["name"], $productfilter) !== false;
+				$nameMatch = stripos(strtolower($obj["name"]), strtolower($productfilter)) !== false;
 			}
 
 			if ($pricefilter) {
