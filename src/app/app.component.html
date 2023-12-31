@@ -1,3 +1,15 @@
+<style>
+    footer {
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      padding: 1rem;
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+    }
+  </style>
+  <app-landing-page></app-landing-page>
 <app-login (isUserConnected)="UserIsConnected($event)"></app-login>
 <p *ngIf="isUserConnected">
     Welcome {{connectedUser.nom}} {{connectedUser.prenom}} !
@@ -7,3 +19,6 @@
 <app-panier [isUserConnected]="isUserConnected"></app-panier>
 <app-search-bar [isUserConnected]="isUserConnected" (searchUpdated)="SendSearchParams($event)"></app-search-bar>
 <app-products-view [isUserConnected]="isUserConnected" [filters]="filters"></app-products-view>
+<footer>
+    &copy; 2023 Baisong - All rights reserved
+  </footer>

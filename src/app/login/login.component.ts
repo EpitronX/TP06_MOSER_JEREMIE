@@ -15,19 +15,36 @@ export class LoginComponent {
   password: string = '';
   nom: string = '';
   prenom: string = '';
-  connectedUser:Client = new Client;
+  connectedUser: Client = new Client;
   cnx: boolean = false;
-  constructor(private apiService: ApiService) {  }
+  wrongCredentials: boolean = false;
+  loading: boolean = false;
+
+  constructor(private apiService: ApiService) { }
   connexion() {
-    this.apiService.loginClient(this.login, this.password).subscribe((c:Client) => {
-    console.log(c.nom);
-    console.log(c.prenom);
+    this.wrongCredentials = false;
+    this.loading = true;
+    this.apiService.loginClient(this.login, this.password).subscribe((c: Client) => {
+      console.log(c.nom);
+      console.log(c.prenom);
       this.nom = c.nom;
       this.prenom = c.prenom;
       this.cnx = true;
       this.connectedUser.nom = c.nom;
       this.connectedUser.prenom = c.prenom;
       this.isUserConnected.emit([this.cnx, this.connectedUser]);
-    });
-} 
+      this.loading = false;
+    },
+      (error) => {
+        this.wrongCredentials = true;
+        this.loading = false;
+      }
+    );
+  }
+  deconnexion() {
+    this.connectedUser.nom = '';
+    this.connectedUser.prenom = '';
+    this.cnx = false;
+    this.isUserConnected.emit([this.cnx, this.connectedUser]);
+  }
 }

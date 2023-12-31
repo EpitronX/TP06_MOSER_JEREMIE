@@ -34,7 +34,7 @@
         <label for="pword">Mot de passe</label><br>
         <input type="password" id="pword" [(ngModel)]="password" required><br>
     
-        <button>Envoyez</button>
+        <button (click)="CreateUser()">Envoyez</button>
         <div id="error-container" style="display: unset;width: 100%; margin-top: 10px;">
             <p id="p-form-error"
                 style="background: #d33f3f;color: #f1dede; font-size: 18px; padding: 6px;font-family: 'Calibri Light','Lucida Sans'; margin: 0px;">

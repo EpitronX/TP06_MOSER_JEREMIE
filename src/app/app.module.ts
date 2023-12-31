@@ -14,6 +14,7 @@ import { ApiService } from './api.service';
 import { ApiHttpInterceptor } from './http-interceptor';
 import { LoginComponent } from './login/login.component';
 import { UserCreationComponent } from './user-creation/user-creation.component';
+import { LandingPageComponent } from './landing-page/landing-page.component';
 @NgModule({
   declarations:
     [
@@ -22,7 +23,8 @@ import { UserCreationComponent } from './user-creation/user-creation.component';
       SearchBarComponent,
       PanierComponent,
       LoginComponent,
-      UserCreationComponent
+      UserCreationComponent,
+      LandingPageComponent
     ],
   imports:
     [
