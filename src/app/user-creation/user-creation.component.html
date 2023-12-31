@@ -1,0 +1,44 @@
+<div class="MainFormDiv" style="flex-direction: column;padding-left: 28%;padding-right: 28%;">
+
+    <form action="/Forms/Customer_Account_Entry.php" method="POST" onsubmit="return validateForm(event)">
+        <label for="fname">Votre prénom 😁</label><br>
+        <input type="text" id="fname" [(ngModel)]="prenom" required><br>
+    
+        <label for="lname">Votre nom</label><br>
+        <input type="text" id="lname" [(ngModel)]="nom" required><br>
+    
+        <label for="address">Addresse complète</label><br>
+        <input type="text" id="address" [(ngModel)]="adresse" required><br>
+    
+        <label for="city">Ville</label><br>
+        <input type="text" id="city" [(ngModel)]="ville" required><br>
+    
+        <label for="phone">Téléphone</label><br>
+        <input type="tel" id="phone" [(ngModel)]="telephone" required><br>
+    
+        <label for="mail">Email</label><br>
+        <input type="email" id="mail" [(ngModel)]="email" required><br>
+    
+        <label>Civilité</label><br>
+        <div class="RadioButtonDiv" style="margin-top: 10px;margin-bottom: 10px;">
+            <input type="radio" id="cvlty-4" value="X" [(ngModel)]="sexe" checked required>
+            <label class="RadioButton" for="cvlty-4">Non renseigné</label><br>
+            <input type="radio" id="cvlty-1" value="F" [(ngModel)]="sexe">
+            <label class="RadioButton" for="cvlty-1">Madame</label>
+            <input type="radio" id="cvlty-2" value="H" [(ngModel)]="sexe" >
+            <label class="RadioButton" for="cvlty-2">Monsieur</label>
+            <input type="radio" id="cvlty-3" value="N" [(ngModel)]="sexe">
+            <label class="RadioButton" for="cvlty-3">Non binaire</label>
+        </div>
+    
+        <label for="pword">Mot de passe</label><br>
+        <input type="password" id="pword" [(ngModel)]="password" required><br>
+    
+        <button>Envoyez</button>
+        <div id="error-container" style="display: unset;width: 100%; margin-top: 10px;">
+            <p id="p-form-error"
+                style="background: #d33f3f;color: #f1dede; font-size: 18px; padding: 6px;font-family: 'Calibri Light','Lucida Sans'; margin: 0px;">
+            </p>
+        </div>
+    </form>
+</div>
