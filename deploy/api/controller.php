@@ -50,7 +50,7 @@ function getSearchCatalogue(Request $request, Response $response, $args)
 		$res = array_filter($data, function ($obj) use ($productfilter, $pricefilter) {
 			$nameMatch = true;
 			$priceMatch = true;
-		
+
 			if ($productfilter) {
 				$nameMatch = stripos(strtolower($obj["name"]), strtolower($productfilter)) !== false;
 			}
@@ -258,8 +258,8 @@ function AddUser(Request $request, Response $response, $args)
 			$error = json_decode($emailValidationResponse->getBody(), true);
 			$response = $response->withStatus(400);
 		} else {
-			
-			
+
+
 			// $loginValidationResponse = LoginValide($request, $response, ['login' => $login]);
 			// $loginAllowed = json_decode($loginValidationResponse->getBody(), true)['loginAllowed'];
 			// if (!$loginAllowed) {
@@ -267,29 +267,29 @@ function AddUser(Request $request, Response $response, $args)
 			// 	$error = json_decode($loginValidationResponse->getBody(), true);
 			// 	$response = $response->withStatus(400);
 			// } else {
-				try {
-					//code...
-					$user = new Utilisateurs();
-					$user->setNom($nom);
-					$user->setPrenom($prenom);
-					$user->setAdresse($adresse);
-					$user->setCodePostal($codepostal);
-					$user->setVille($ville);
-					$user->setEmail($email);
-					$user->setSexe($sexe);
-					$user->setLogin($login);
-					$user->setPassword(password_hash($password, PASSWORD_DEFAULT));
-					$user->setTelephone($telephone);
-					$entityManager->persist($user);
-					$entityManager->flush();
-					$status = 'L\'utilisateur <' . $nom . '> a bien été créé !';
-					$response = $response->withStatus(200);
-				} catch (\Throwable $th) {
-					$status = 'La création de l\'utilisateur <' . $nom . '> a échoué ! Vérifiez l\'état des paramètres entrés.';
-					$array["error"] = $th;
-					$response = $response->withStatus(500);
-				}
+			try {
+				//code...
+				$user = new Utilisateurs();
+				$user->setNom($nom);
+				$user->setPrenom($prenom);
+				$user->setAdresse($adresse);
+				$user->setCodePostal($codepostal);
+				$user->setVille($ville);
+				$user->setEmail($email);
+				$user->setSexe($sexe);
+				$user->setLogin($login);
+				$user->setPassword(password_hash($password, PASSWORD_DEFAULT));
+				$user->setTelephone($telephone);
+				$entityManager->persist($user);
+				$entityManager->flush();
+				$status = 'L\'utilisateur <' . $nom . '> a bien été créé !';
+				$response = $response->withStatus(200);
+			} catch (\Throwable $th) {
+				$status = 'La création de l\'utilisateur <' . $nom . '> a échoué ! Vérifiez l\'état des paramètres entrés.';
+				$array["error"] = $th;
+				$response = $response->withStatus(500);
 			}
+			//}
 		}
 	}
 
