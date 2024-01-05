@@ -177,8 +177,6 @@ function EmailValide(Request $request, Response $response, $args)
 			$emailAllowed = false;
 		}
 	} else {
-		$status = 'Adresse e-mail invalide !';
-		//$array["status"] = $status;
 		$response = $response->withStatus(400);
 		$emailAllowed = false;
 	}
@@ -201,19 +199,19 @@ function LoginValide(Request $request, Response $response, $args)
 	if (!$err) {
 		$utilisateurRepository = $entityManager->getRepository('Utilisateurs');
 		$utilisateur = $utilisateurRepository->findOneBy(['login' => $login]);
-		$status = 'Le pseudo de login est autorisé !';
+		$message = 'Le pseudo de login est autorisé !';
 
 		if ($utilisateur !== null) {
 			$loginAllowed = false;
-			$status = 'Le pseudo de login est déjà utilisé !';
+			$message = 'Le pseudo de login est déjà utilisé !';
 		}
 	} else {
 		$loginAllowed = false;
-		$status = 'Le pseudo de login est invalide !';
+		$message = 'Le pseudo de login est invalide !';
 		$response = $response->withStatus(400);
 	}
 	$array["loginAllowed"] = $loginAllowed;
-	$array["status"] = $status;
+	$array["message"] = $message;
 	$array["login"] = $login;
 	$response->getBody()->write(json_encode($array));
 	return addHeaders($response);
@@ -226,7 +224,7 @@ function AddUser(Request $request, Response $response, $args)
 	$body = $request->getParsedBody();
 	$array = [];
 	$error = null;
-	$status = '';
+	$message = '';
 
 	$nom = filter_var($body['nom'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 	$prenom = filter_var($body['prenom'], FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -244,7 +242,7 @@ function AddUser(Request $request, Response $response, $args)
 	}
 
 	if ($err) {
-		$status = 'La création de l\'utilisateur a échoué !';
+		$message = 'La création de l\'utilisateur a échoué !';
 		$error = '1 ou plusieurs paramètres sont vides !';
 		$response = $response->withStatus(400);
 	} else {
@@ -254,7 +252,7 @@ function AddUser(Request $request, Response $response, $args)
 		$response->getBody()->rewind();
 
 		if (!$emailAllowed) {
-			$status = 'Email not allowed. User registration rejected.';
+			$message = 'Email not allowed. User registration rejected.';
 			$error = json_decode($emailValidationResponse->getBody(), true);
 			$response = $response->withStatus(400);
 		} else {
@@ -282,10 +280,10 @@ function AddUser(Request $request, Response $response, $args)
 				$user->setTelephone($telephone);
 				$entityManager->persist($user);
 				$entityManager->flush();
-				$status = 'L\'utilisateur <' . $nom . '> a bien été créé !';
+				$message = 'L\'utilisateur <' . $nom . '> a bien été créé !';
 				$response = $response->withStatus(200);
 			} catch (\Throwable $th) {
-				$status = 'La création de l\'utilisateur <' . $nom . '> a échoué ! Vérifiez l\'état des paramètres entrés.';
+				$message = 'La création de l\'utilisateur <' . $nom . '> a échoué ! Vérifiez l\'état des paramètres entrés.';
 				$array["error"] = $th;
 				$response = $response->withStatus(500);
 			}
@@ -293,7 +291,7 @@ function AddUser(Request $request, Response $response, $args)
 		}
 	}
 
-	$array["status"] = $status;
+	$array["message"] = $message;
 	$array["error"] = $error;
 	$array["nom"] = $nom;
 	$array["prenom"] = $prenom;
