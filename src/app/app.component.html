@@ -27,12 +27,12 @@
 <body>
   <app-landing-page *ngIf="!isUserConnected"></app-landing-page>
   <app-login (isUserConnected)="UserIsConnected($event)"></app-login>
+  <app-user-creation *ngIf="!isUserConnected"></app-user-creation>
   <p *ngIf="isUserConnected">
       Welcome {{connectedUser.nom}} {{connectedUser.prenom}} !
       <br>
       Here's your cart ⬇
   </p>
-  <app-user-creation></app-user-creation>
   <app-panier *ngIf="isUserConnected" [isUserConnected]="isUserConnected"></app-panier>
   <app-search-bar [isUserConnected]="isUserConnected" (searchUpdated)="SendSearchParams($event)"></app-search-bar>
   <app-products-view [isUserConnected]="isUserConnected" [filters]="filters"></app-products-view>

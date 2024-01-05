@@ -22,9 +22,9 @@
   </style>
 
 <div *ngIf="isUserConnected">
-    <label>Nom du produit : </label>
+    <label>Product name : </label>
     <input (input)="OnSearchUpdate()" [(ngModel)] = "nameSearch"/>
     <br>
-    <label>Prix MAX du produit : </label>
-    <input (input)="OnSearchUpdate()"  [(ngModel)] = "priceSearch" title="Indiquez un prix" type="number"/>
+    <label>MAX product price : </label>
+    <input (input)="OnSearchUpdate()"  [(ngModel)] = "priceSearch" title="Pick a price" type="number"/>
 </div>

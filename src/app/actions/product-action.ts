@@ -9,3 +9,7 @@ export class AddProduct {
     static readonly type = '[Product] Del';
     constructor(public productToRemove: Product) {}
   }
+
+  export class EmptyProduct {
+    static readonly type = '[Product] Empty';
+  }

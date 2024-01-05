@@ -1,33 +1,59 @@
 <style>
-:host {
-  display: block;
-  margin: 20px;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: #f9f9f9;
-  font-family: Arial, sans-serif;
-  font-size: 16px; 
-}
+  :host {
+    display: block;
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+  }
 
-div {
-  margin-bottom: 10px;
-  font-size: 14px;
-}
+  div {
+    margin-bottom: 10px;
+    font-size: 14px;
+  }
 
-button {
-  padding: 5px 10px;
-  background-color: #333;
-  color: #fff;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
-  font-size: 14px;
-}
+  button {
+    padding: 5px 10px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 14px;
+  }
 
-button:hover {
-  background-color: #555;
-}
+  button:hover {
+    background-color: #555;
+  }
+
+  .PayButton {
+    color: #fff;
+    padding: 0.8rem 2rem;
+    border: none;
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  button:disabled {
+    background-color: #999;
+    cursor: not-allowed;
+  }
+
+  button:hover {
+    background-color: #555;
+  }
+
+  .logout-button-container {
+    /* position: fixed; */
+    top: 10px;
+    left: 10px;
+    text-align: right;
+  }
 </style>
 
 <!-- <p>panier works!</p> -->
@@ -36,6 +62,10 @@ button:hover {
   <div>Cart price : {{ cartPrice$ | async }} €</div>
   <br>
   <div *ngFor="let product of liste$ | async">
-    {{ product.name }} {{product.price}} €  <button (click)="delProduct(product)">-</button>
+    {{ product.name }} {{product.price}} € <button (click)="delProduct(product)">-</button>
+  </div>
+
+  <div *ngIf="cartPrice > 0">
+    <button class="PayButton" (click)="Pay()">Pay 🛒</button>
   </div>
 </div>

@@ -54,13 +54,13 @@
     <label for="login">login : </label><input [(ngModel)]="login" (keyup.enter)="connexion()" /><br />
 <label for="password">password : </label><input [(ngModel)]="password" (keyup.enter)="connexion()" type="password" /><br />
 <br />
-<button [disabled]="loading" (click)="connexion()">Connexion</button>
+<button [disabled]="loading" (click)="connexion()">Connection</button>
 <p *ngIf="wrongCredentials" style="color:#ca1a1a;">You entered wrong credentials !</p>
 </div>
 
 <div *ngIf="cnx" class="logout-button-container">
     <br />
-    <button (click)="deconnexion()">Deconnexion</button>
+    <button (click)="deconnexion()">Deconnection</button>
 </div>
 
 <hr />

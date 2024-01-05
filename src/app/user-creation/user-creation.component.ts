@@ -7,6 +7,7 @@ import { ApiService } from '../api.service';
   templateUrl: './user-creation.component.html',
   styleUrls: ['./user-creation.component.css']
 })
+
 export class UserCreationComponent {
   nom: string = '';
   prenom: string = '';
@@ -43,31 +44,52 @@ export class UserCreationComponent {
     this.loading = true;
     this.apiService.CreateUser(newUser).subscribe(
       (response: any) => {
-        if (response.status === 200) {
-          this.information = 'L\'utilisateur ' + this.prenom + ' a bien été créé !';
-        } else {
+        this.loading = false;
+        if (!response.error) {
+          //response.status === 200 doesn't work 😭😭😭
+          this.resetFormValues();
+          this.information = 'The user ' + this.prenom + ' has been correctly created !';
+        }
+        else {
           this.processError(response, this)
         }
-        this.loading = true;
       },
       (error) => {
         this.processError(error, this)
-        this.loading = true;
+        this.loading = false;
       }
     );
   }
 
   processError = (error: any, context: any) => {
-    const errorObject = JSON.parse(JSON.stringify(error));
-    const errorDetails = errorObject.error;
-    if (JSON.stringify(errorDetails.error) != undefined) {
-      context.error = JSON.stringify(errorDetails.error).replace(/"/g, '');
-    } else {
-      context.error = errorDetails.replace(/"/g, '');
+
+    if (error instanceof SyntaxError) {
+      context.error = 'An error occurred while creating the user 😿 !\n Please check the integrity of the data entered 🔍. The email address entered must not belong to any other account and must be in a valid format 🤓. The chosen login may already be in use 🤷🏾‍♂️.';
     }
-    if (!context.error) {
-      context.error = 'Une erreur est survenue lors de la création de l\'utilisateur ! \nPensez à vérifiez des données entrées.';
+    else {
+      const errorObject = JSON.parse(JSON.stringify(error));
+      const errorDetails = errorObject.error;
+      if (JSON.stringify(errorDetails.error) != undefined) {
+        context.error = JSON.stringify(errorDetails.error).replace(/"/g, '');
+      } else {
+        context.error = errorDetails.replace(/"/g, '');
+      }
+      if (!context.error) {
+      context.error = 'An error occurred while creating the user 😿 !\n Please check the integrity of the data entered 🔍. The email address entered must not belong to any other account and must be in a valid format 🤓. The chosen login may already be in use 🤷🏾‍♂️.';
+      }
     }
   }
 
+  resetFormValues() {
+    this.nom = '';
+    this.prenom = '';
+    this.adresse = '';
+    this.codepostal = '';
+    this.ville = '';
+    this.email = '';
+    this.sexe = '';
+    this.login = '';
+    this.password = '';
+    this.telephone = '';
+  }
 }

@@ -8,7 +8,7 @@ import {
   createSelector,
 } from '@ngxs/store';
 import { ProductStateModel } from './product-state-model';
-import { AddProduct, DelProduct } from '../actions/product-action';
+import { AddProduct, DelProduct, EmptyProduct } from '../actions/product-action';
 
 @State<ProductStateModel>({
   name: 'products',
@@ -72,5 +72,12 @@ export class ProductState {
         (x) => !(productToRemove.idCart == x.idCart && productToRemove.id == x.id)
       ),
     });
+  }
+
+  @Action(EmptyProduct)
+  emptyCart(ctx: StateContext<any>, action: EmptyProduct) {
+    const state = ctx.getState();
+    ctx.setState({ ...state, products: [] });
+    window.alert("The cart's been emptied !");
   }
 }
