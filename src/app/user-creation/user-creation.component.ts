@@ -19,6 +19,8 @@ export class UserCreationComponent {
   password: string = '';
   telephone: string = '';
   error: string = '';
+  information: string = '';
+  loading: boolean = false;
 
 
   constructor(private apiService: ApiService) { }
@@ -35,22 +37,37 @@ export class UserCreationComponent {
     newUser.password = this.password;
     newUser.telephone = this.telephone;
 
-    console.log("--------------------------");
     console.log(newUser);
     this.error = '';
+    this.information = '';
+    this.loading = true;
     this.apiService.CreateUser(newUser).subscribe(
-      (response) => {
-        // Handle the response from the API if needed
+      (response: any) => {
+        if (response.status === 200) {
+          this.information = 'L\'utilisateur ' + this.prenom + ' a bien été créé !';
+        } else {
+          this.processError(response, this)
+        }
+        this.loading = true;
       },
       (error) => {
-       ;
-        console.log("hhehhehe");
-        console.log(error);
-        const errorObject = JSON.parse(JSON.stringify(error)); // Parse the JSON string back to an object
-        const errorDetails = errorObject.error;
-        this.error = JSON.stringify(errorDetails.error).replace(/"/g, '');
-        // Handle any errors that occur during the API call
+        this.processError(error, this)
+        this.loading = true;
       }
     );
   }
+
+  processError = (error: any, context: any) => {
+    const errorObject = JSON.parse(JSON.stringify(error));
+    const errorDetails = errorObject.error;
+    if (JSON.stringify(errorDetails.error) != undefined) {
+      context.error = JSON.stringify(errorDetails.error).replace(/"/g, '');
+    } else {
+      context.error = errorDetails.replace(/"/g, '');
+    }
+    if (!context.error) {
+      context.error = 'Une erreur est survenue lors de la création de l\'utilisateur ! \nPensez à vérifiez des données entrées.';
+    }
+  }
+
 }

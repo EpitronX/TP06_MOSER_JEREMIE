@@ -93,8 +93,13 @@
         <label for="pword">Mot de passe</label><br>
         <input type="password" id="pword" [(ngModel)]="password" name="pword" required><br>
     
-        <button class="formButton" style="margin-bottom:10px;" (click)="CreateUser()">Créer un compte</button>
+        <button [disabled]="loading" class="formButton" style="margin-bottom:10px;" (click)="CreateUser()">Créer un compte</button>
 
+        <div *ngIf="information" id="information-container" style="display: unset;width: 100%;">
+          <p id="p-form-information"                style="background: #44d33f;color: #f1dede; font-size: 18px; padding: 6px;font-family: 'Calibri Light','Lucida Sans'; margin: 0px;">
+          {{information}}
+          </p>
+      </div>
         <div *ngIf="error" id="error-container" style="display: unset;width: 100%;">
             <p id="p-form-error"                style="background: #d33f3f;color: #f1dede; font-size: 18px; padding: 6px;font-family: 'Calibri Light','Lucida Sans'; margin: 0px;">
             {{error}}
