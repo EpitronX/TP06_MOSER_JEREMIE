@@ -260,13 +260,13 @@ function AddUser(Request $request, Response $response, $args)
 		} else {
 			
 			
-			$loginValidationResponse = LoginValide($request, $response, ['login' => $login]);
-			$loginAllowed = json_decode($loginValidationResponse->getBody(), true)['loginAllowed'];
-			if (!$loginAllowed) {
-				$status = 'Login\'s already taken ! User registration rejected.';
-				$error = json_decode($loginValidationResponse->getBody(), true);
-				$response = $response->withStatus(400);
-			} else {
+			// $loginValidationResponse = LoginValide($request, $response, ['login' => $login]);
+			// $loginAllowed = json_decode($loginValidationResponse->getBody(), true)['loginAllowed'];
+			// if (!$loginAllowed) {
+			// 	$status = 'Login\'s already taken ! User registration rejected.';
+			// 	$error = json_decode($loginValidationResponse->getBody(), true);
+			// 	$response = $response->withStatus(400);
+			// } else {
 				try {
 					//code...
 					$user = new Utilisateurs();
@@ -293,7 +293,6 @@ function AddUser(Request $request, Response $response, $args)
 		}
 	}
 
-	//$response->getBody()->rewind();
 	$array["status"] = $status;
 	$array["error"] = $error;
 	$array["nom"] = $nom;
